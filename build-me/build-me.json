@@ -1,0 +1,11 @@
+{
+    "simple_web_project" : {
+        "_" : ["index.html", "script.js", "style.css"]
+    },
+
+    "bootstrap_web_project" : {
+        "_" : ["index.html"],
+        "style" : ["@bootstrap", "style.css"],
+        "scripts" : ["@jquery", "script.js"]
+    }
+}

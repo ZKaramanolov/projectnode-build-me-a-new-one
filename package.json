@@ -1,0 +1,19 @@
+{
+  "name": "project-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build-me-a-new-one.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZKaramanolov/projectnode-build-me-a-new-one.git"
+  },
+  "author": "Zdravko Karamanolov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZKaramanolov/projectnode-build-me-a-new-one/issues"
+  },
+  "homepage": "https://github.com/ZKaramanolov/projectnode-build-me-a-new-one#readme"
+}

@@ -72,14 +72,16 @@ const generatePrject = () => {
 
             } else if (files[j].indexOf('@') > -1) {
 
+                var f = files[1];
+
                 if (!fs.existsSync(`${projectName}/${files[j]}`)){
                     fs.mkdirSync(`${projectName}/${files[j]}`);
                 }
 
                 addLibraries(files[j], (data) => {
-                    for(var element in data){
-                        fs.mkdirSync(`${projectName}/${files[j]}/${data[element].name}`, { recursive : true });
-                    }
+                    //console.log(typeof data);
+                        //fs.pipe(`${projectName}/${files[j]}/${data[element].name}`, { recursive : true });
+                        //createFile(files[j], data);
                 });
 
             }
@@ -87,42 +89,54 @@ const generatePrject = () => {
     }
 }
 
+const addLibraries = (file, callback) => {
+
+    for (var i = 0; i < Object.keys(libs).length; i++) {
+
+        if ((Object.keys(libs)[i]) == file) {
+
+            var fileNames = [];
+
+            for(var k in libs[file]){
+                fileNames.push(k);
+            }
+            //console.log(file);
+
+            var fileInx = 0;
+            for(var j of Object.keys(libs[file])) {
+
+                var requestStreamCollection = [];
+                var responseObject = null;
+
+                https.get(libs[file][j], (res) => {
+
+                    res.on('data', function(chunk) {
+                        requestStreamCollection.push(chunk);
+                    });
+
+                    res.on('end', function() {
+                        responseObject = requestStreamCollection.join('');
+                        //console.log(responseObject);
+                        //console.log(fileNames[fileInx], responseObject);
+                        fs.writeFile(`${projectName}/${file}/${fileNames[fileInx]}`, responseObject, (err) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                        fileInx++;
+                    });
+                });
+            }
+        }
+    }
+};
+
 const createFile = (file, ph = '') => {
     fs.writeFile(projectName + '/' + file, ph, (err) => {
         if (err) {
             console.log(err);
         }
     });
-};
-
-const addLibraries = (file, callback) => {
-
-    for (var i = 0; i < Object.keys(libs).length; i++) {
-        if (('@' + Object.keys(libs)[i]) == file) {
-            //console.log(libs[Object.keys(libs)[i]]);
-
-            const requestParameterCollection = {
-                headers : {
-                    'User-Agent' : 'Test User Agent'
-                }
-            };
-
-            var requestStreamCollection = [];
-            var responseObject = null;
-
-            https.get(libs[Object.keys(libs)[i]], requestParameterCollection, (res) => {
-
-                res.on('data', function(chunk) {
-                    requestStreamCollection.push(chunk);
-                });
-
-                res.on('end', function() {
-                    responseObject = requestStreamCollection.join('');
-                    callback(responseObject);
-                });
-            });
-        }
-    }
 };
 
 generatePrject();
